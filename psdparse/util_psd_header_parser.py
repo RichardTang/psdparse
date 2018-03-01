@@ -26,9 +26,9 @@ class PsdHeaderParser(PsdCommonParser):
 
     C_PSD_HEADER = ">4sH 6B HLLHH"
     (self.header['sig'], self.header['version'], self.header['r0'],
-     self.header['r1'], self.header['r2'], self.header['r3'],
-     self.header['r4'], self.header['r5'], self.header['channels'],
-     self.header['rows'], self.header['cols'], self.header['depth'],
+     self.header['r1'], self.header['r2'], self.header['r3'], self.header['r4'],
+     self.header['r5'], self.header['channels'], self.header['rows'],
+     self.header['cols'], self.header['depth'],
      self.header['mode']) = self._readf(C_PSD_HEADER)
 
     self.size = [self.header['rows'], self.header['cols']]
@@ -37,8 +37,7 @@ class PsdHeaderParser(PsdCommonParser):
     if self.header['sig'] != "8BPS":
       raise ValueError("Not a PSD signature: '%s'" % self.header['sig'])
     if self.header['version'] != 1:
-      raise ValueError(
-          "Can not handle PSD version:%d" % self.header['version'])
+      raise ValueError("Can not handle PSD version:%d" % self.header['version'])
     self.header['modename'] = MODES[self.header[
         'mode']] if 0 <= self.header['mode'] < 16 else "(%s)" % self.header[
             'mode']

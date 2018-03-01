@@ -21,6 +21,7 @@ import json
 
 
 class PsdLayerParser(PsdLayerImageParser):
+
   def parse_layer_blend_mode(self):
     #
     # Blend mode
@@ -45,7 +46,7 @@ class PsdLayerParser(PsdLayerImageParser):
     # Layer mask data
     #
     m = {}
-    (m['size'], ) = self._readf(">L")
+    (m['size'],) = self._readf(">L")
     if m['size']:
       (
           m['top'],
@@ -86,7 +87,7 @@ class PsdLayerParser(PsdLayerImageParser):
 
   def parse_layerlen(self, layerlen):
     # layers structure
-    (self.num_layers, ) = self._readf(">h")
+    (self.num_layers,) = self._readf(">h")
     if self.num_layers < 0:
       self.num_layers = -self.num_layers
       #Logger.info(INDENT_OUTPUT(1, "First alpha is transparency for merged image"))
@@ -135,7 +136,7 @@ class PsdLayerParser(PsdLayerImageParser):
       l['blend_mode'] = self.parse_layer_blend_mode()
       visible_bit = (l['blend_mode']['flags'] >> 1 & 1)
       # remember position for skipping unrecognized data
-      (extralen, ) = self._readf(">L")
+      (extralen,) = self._readf(">L")
       extrastart = self.fd.tell()
 
       l['mask'] = self.parse_layer_mask()
@@ -144,11 +145,11 @@ class PsdLayerParser(PsdLayerImageParser):
       # Layer name
       #
       name_start = self.fd.tell()
-      (l['namelen'], ) = self._readf(">B")
+      (l['namelen'],) = self._readf(">B")
       addl_layer_data_start = name_start + self._pad4(l['namelen'] + 1)
       # - "-1": one byte traling 0byte. "-1": one byte garble.
       # (l['name'],) = readf(f, ">%ds" % (self._pad4(1+l['namelen'])-2))
-      (l['name'], ) = self._readf(">%ds" % (l['namelen']))
+      (l['name'],) = self._readf(">%ds" % (l['namelen']))
       #Logger.info(INDENT_OUTPUT(3, "Name: '%s' visible:%d" % (l['name'],visible_bit)))
       self.fd.seek(addl_layer_data_start, 0)
       #
@@ -225,7 +226,7 @@ class PsdLayerParser(PsdLayerImageParser):
   def parse_misclen(self, misclen):
     miscstart = self.fd.tell()
     # process layer info section
-    (layerlen, ) = self._readf(">L")
+    (layerlen,) = self._readf(">L")
     if layerlen:
       self.parse_layerlen(layerlen)
     else:
@@ -250,7 +251,7 @@ class PsdLayerParser(PsdLayerImageParser):
     self.layers = []
     self.images = []
     self.header['mergedalpha'] = False
-    (misclen, ) = self._readf(">L")
+    (misclen,) = self._readf(">L")
     if misclen:
       self.parse_misclen(misclen)
       #Logger.info('Misc info section is parsed')

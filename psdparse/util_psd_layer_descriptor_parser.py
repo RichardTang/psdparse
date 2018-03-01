@@ -16,6 +16,7 @@ from util_psd_image_resource_parser import PsdImageResourceParser
 
 
 class PsdLayerDescriptorParser(PsdImageResourceParser):
+
   def _unicode_string(self):
     len = self._readf(">L")[0]
     result = u''

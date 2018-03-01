@@ -23,7 +23,7 @@ class PsdImageResourceParser(PsdHeaderParser):
     #Logger.info("")
     #Logger.info("# Ressources #")
     self.ressources = []
-    (n, ) = self._readf(">L")  # (n,) is a 1-tuple.
+    (n,) = self._readf(">L")  # (n,) is a 1-tuple.
     #Logger.info('ttttt001')
     while n > 0:
       n -= self.parse_irb()

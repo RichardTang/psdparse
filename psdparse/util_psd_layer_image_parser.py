@@ -40,7 +40,7 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
 
     # channel header
     chpos = self.fd.tell()
-    (comp, ) = self._readf(">H")
+    (comp,) = self._readf(">H")
 
     if chlen:
       chlen -= 2

@@ -17,6 +17,7 @@ from psd_modes import MODES
 
 
 class PsdCommonParser(FileParser):
+
   def _pad2(self, i):
     """same or next even"""
     return (i + 1) / 2 * 2
@@ -31,10 +32,10 @@ class PsdCommonParser(FileParser):
     r['at'] = self.fd.tell()
     (r['type'], r['id'], r['namelen']) = self._readf(">4s H B")
     n = self._pad2(r['namelen'] + 1) - 1
-    (r['name'], ) = self._readf(">%ds" % n)
+    (r['name'],) = self._readf(">%ds" % n)
     r['name'] = r['name'][:-1]  # skim off trailing 0byte
     r['short'] = r['name'][:20]
-    (r['size'], ) = self._readf(">L")
+    (r['size'],) = self._readf(">L")
     self.fd.seek(self._pad2(r['size']), 1)  # 1: relative
     r['rdesc'] = "[%s]" % RESOURCE_DESCRIPTIONS.get(r['id'], "?")
     #Logger.info(INDENT_OUTPUT(1, "Resource: %s" % r))
