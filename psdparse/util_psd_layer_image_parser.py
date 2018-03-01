@@ -72,7 +72,7 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
         channel_name = CHANNEL_SUFFIXES[li['chids'][idx]]
         #Logger.info('000002')
         if li['channels'] == 2 and channel_name == 'B': channel_name = 'L'
-        p = Image.fromstring("L", (cols, rows), data, "packbits", "L")
+        p = Image.frombytes("L", (cols, rows), data, "packbits", "L")
         #Logger.info('000003')
         if is_layer:
           #Logger.info('0000030')
@@ -90,7 +90,7 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
         data = self.fd.read(cols * rows)
         channel_name = CHANNEL_SUFFIXES[li['chids'][idx]]
         if li['channels'] == 2 and channel_name == 'B': channel_name = 'L'
-        p = Image.fromstring("L", (cols, rows), data, "raw", "L")
+        p = Image.frombytes("L", (cols, rows), data, "raw", "L")
         if is_layer:
           if channel_name in PIL_BANDS:
             self.images[li['idx']][PIL_BANDS[channel_name]] = p
