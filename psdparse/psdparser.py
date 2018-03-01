@@ -11,12 +11,13 @@ import os
 from psd_channel_suffixes import CHANNEL_SUFFIXES
 from psd_resource_descriptions import RESOURCE_DESCRIPTIONS
 from psd_modes import MODES
-from psd_compressions import  COMPRESSIONS
+from psd_compressions import COMPRESSIONS
 from psd_blendings import BLENDINGS
 from psd_pil_bands import PIL_BANDS
 
 from util_indent_output import INDENT_OUTPUT
 from util_psd_layer_parser import PsdLayerParser
+
 
 class PSDParser(PsdLayerParser):
   num_layers = 0
@@ -50,8 +51,10 @@ class PSDParser(PsdLayerParser):
     self.merged_image = []
     li = {}
     li['chids'] = range(self.header['channels'])
-    li['chlengths'] = [ None ] * self.header['channels'] # dummy data
-    (li['name'], li['channels'], li['rows'], li['cols']) = ('merged', self.header['channels'], self.header['rows'], self.header['cols'])
+    li['chlengths'] = [None] * self.header['channels']  # dummy data
+    (li['name'], li['channels'], li['rows'],
+     li['cols']) = ('merged', self.header['channels'], self.header['rows'],
+                    self.header['cols'])
     li['layernum'] = -1
     self.parse_image(li, is_layer=False)
     if li['channels'] == 1:
@@ -62,4 +65,3 @@ class PSDParser(PsdLayerParser):
       self.merged_image = Image.merge('RGBA', self.merged_image[:4])
     else:
       raise ValueError('Unsupported mode or number of channels')
-

@@ -13,9 +13,10 @@ from util_file_parser import FileParser
 
 from psd_modes import MODES
 from util_psd_layer_descriptor_parser import PsdLayerDescriptorParser
-from psd_compressions import  COMPRESSIONS
+from psd_compressions import COMPRESSIONS
 from psd_pil_bands import PIL_BANDS
 from psd_channel_suffixes import CHANNEL_SUFFIXES
+
 
 class PsdLayerImageParser(PsdLayerDescriptorParser):
   images = None
@@ -30,16 +31,16 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
     depth -- bits
     """
     chlen = li['chlengths'][idx]
-    if chlen is not None  and  chlen < 2:
+    if chlen is not None and chlen < 2:
       raise ValueError("Not enough channel data: %s" % chlen)
     if li['chids'][idx] == -2:
       rows, cols = li['mask']['rows'], li['mask']['cols']
 
-    rb = (cols * depth + 7) / 8 # round to next byte
+    rb = (cols * depth + 7) / 8  # round to next byte
 
     # channel header
     chpos = self.fd.tell()
-    (comp,) = self._readf(">H")
+    (comp, ) = self._readf(">H")
 
     if chlen:
       chlen -= 2
@@ -55,8 +56,10 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
       #Logger.info(INDENT_OUTPUT(1, "Handling RLE compressed data"))
       rlecounts = 2 * count * rows
       if chlen and chlen < rlecounts:
-        raise ValueError("Channel too short for RLE row counts (need %d bytes, have %d bytes)" % (rlecounts,chlen))
-      pos += rlecounts # image data starts after RLE counts
+        raise ValueError(
+            "Channel too short for RLE row counts (need %d bytes, have %d bytes)"
+            % (rlecounts, chlen))
+      pos += rlecounts  # image data starts after RLE counts
       rlecounts_data = self._readf(">%dH" % (count * rows))
       for ch in range(count):
         #Logger.info('ch=%d' % ch)
@@ -69,7 +72,7 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
         channel_name = CHANNEL_SUFFIXES[li['chids'][idx]]
         #Logger.info('000002')
         if li['channels'] == 2 and channel_name == 'B': channel_name = 'L'
-        p = Image.fromstring("L", (cols, rows), data, "packbits", "L" )
+        p = Image.fromstring("L", (cols, rows), data, "packbits", "L")
         #Logger.info('000003')
         if is_layer:
           #Logger.info('0000030')
@@ -98,16 +101,16 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
       # TODO: maybe just skip channel...:
       #   f.seek(chlen, SEEK_CUR)
       #   return
-      raise ValueError("Unsupported compression type: %s" % COMPRESSIONS.get(comp, comp))
+      raise ValueError(
+          "Unsupported compression type: %s" % COMPRESSIONS.get(comp, comp))
     #Logger.info('000005')
     #Logger.info('chlen=%d' % chlen)
     #Logger.info('chpos=%d' % chpos)
     if (chlen is not None) and (self.fd.tell() != chpos + 2 + chlen):
       #Logger.info("currentpos:%d should be:%d!" % (self.fd.tell(), chpos + 2 + chlen))
-      self.fd.seek(chpos + 2 + chlen, 0) # 0: SEEK_SET
+      self.fd.seek(chpos + 2 + chlen, 0)  # 0: SEEK_SET
     #Logger.info('end of parse channel')
     return
-
 
   def parse_image(self, li, is_layer=True):
     if not self.header:
@@ -122,8 +125,10 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
     # channels
     if is_layer:
       for ch in range(li['channels']):
-        self.parse_channel(li, ch, 1, li['rows'], li['cols'], self.header['depth'], is_layer)
+        self.parse_channel(li, ch, 1, li['rows'], li['cols'],
+                           self.header['depth'], is_layer)
     else:
-      self.parse_channel(li, 0, li['channels'], li['rows'], li['cols'], self.header['depth'], is_layer)
+      self.parse_channel(li, 0, li['channels'], li['rows'], li['cols'],
+                         self.header['depth'], is_layer)
     #Logger.info('end of parse image')
     return

@@ -14,6 +14,7 @@ from util_file_parser import FileParser
 from psd_modes import MODES
 from util_psd_image_resource_parser import PsdImageResourceParser
 
+
 class PsdLayerDescriptorParser(PsdImageResourceParser):
   def _unicode_string(self):
     len = self._readf(">L")[0]
@@ -23,15 +24,15 @@ class PsdLayerDescriptorParser(PsdImageResourceParser):
       if val:
         result += unichr(val)
     return result
-    
+
   def _desc_TEXT(self):
     return self._unicode_string()
 
   def _desc_enum(self):
-    return { 
-      'typeID' : self._string_or_key(),
-        'enum' : self._string_or_key(),
-           }
+    return {
+        'typeID': self._string_or_key(),
+        'enum': self._string_or_key(),
+    }
 
   def _desc_long(self):
     return self._readf(">l")[0]
@@ -62,18 +63,18 @@ class PsdLayerDescriptorParser(PsdImageResourceParser):
     #Logger.info('len=%d' % len)
     pdf_data = self.fd.read(len)
     return pdf_data
-    
+
   def _read_descriptor(self):
     # Descriptor
     _desc_item_factory = {
-      'TEXT' : self._desc_TEXT,
-      'enum' : self._desc_enum,
-      'long' : self._desc_long,
-      'bool' : self._desc_bool,
-      'doub' : self._desc_doub,
-      'UntF' : self._desc_untf,
-      'tdta' : self._desc_tdta,
-      'Objc' : self._read_descriptor,
+        'TEXT': self._desc_TEXT,
+        'enum': self._desc_enum,
+        'long': self._desc_long,
+        'bool': self._desc_bool,
+        'doub': self._desc_doub,
+        'UntF': self._desc_untf,
+        'tdta': self._desc_tdta,
+        'Objc': self._read_descriptor,
     }
 
     class_id_name = self._unicode_string()
