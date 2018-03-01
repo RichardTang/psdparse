@@ -18,3 +18,16 @@ in Bitmap, Indexed, Grey Scale, CMYK and RGB Colour modes
 and 8/16 bit depths, with up to 53 alpha channels.
 
 This software uses zlib which is (C) Jean-loup Gailly and Mark Adler.
+
+- Install command
+pip install git+https://github.com/RichardTang/psdparse.git
+
+- uninstall command
+pip uninstall psdparser
+
+- usage example:
+
+from psdparse import PSDParser
+parser=PSDParser('mmm.psd')
+parser.parse()
+parser.merged_image.save('mmm.png', 'PNG')
