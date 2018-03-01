@@ -6,7 +6,6 @@ sys.setdefaultencoding("utf-8")
 from struct import unpack, calcsize
 from PIL import Image
 
-from kivy.logger import Logger
 import os
 
 from util_indent_output import INDENT_OUTPUT
@@ -77,9 +76,9 @@ class PsdLayerParser(PsdLayerImageParser):
     (self.num_layers,) = self._readf(">h")
     if self.num_layers < 0:
       self.num_layers = -self.num_layers
-      Logger.info(INDENT_OUTPUT(1, "First alpha is transparency for merged image"))
+      #Logger.info(INDENT_OUTPUT(1, "First alpha is transparency for merged image"))
       self.header['mergedalpha'] = True
-    Logger.info(INDENT_OUTPUT(1, "Layer info for %d layers:" % self.num_layers))
+    #Logger.info(INDENT_OUTPUT(1, "Layer info for %d layers:" % self.num_layers))
     if self.num_layers * (18 + 6 * self.header['channels']) > layerlen:
       raise ValueError("Unlikely number of %s layers for %s channels with %s layerlen. Giving up." % (self.num_layers, self.header['channels'], layerlen))
     linfo = [] # collect header infos here
@@ -94,7 +93,7 @@ class PsdLayerParser(PsdLayerImageParser):
       #Logger.info(INDENT_OUTPUT(1, "layer %(idx)d: (%(left)4d,%(top)4d,%(right)4d,%(bottom)4d), %(channels)d channels (%(cols)4d cols x %(rows)4d rows)" % l))
       # Sanity check
       if l['bottom'] < l['top'] or l['right'] < l['left'] or l['channels'] > 64:
-        Logger.info(INDENT_OUTPUT(2, "Something's not right about that, trying to skip layer."))
+        #Logger.info(INDENT_OUTPUT(2, "Something's not right about that, trying to skip layer."))
         self.fd.seek(6 * l['channels'] + 12, 1) # 1: SEEK_CUR
         self._skip_block("layer info: extra data", 2)
         continue # next layer
@@ -112,7 +111,8 @@ class PsdLayerParser(PsdLayerImageParser):
           # pythons negative list-indexs: [ 0, 1, 2, 3, ... -2, -1]
           l['chindex'][chid] = j
         else:
-          Logger.info(INDENT_OUTPUT(3, "Unexpected channel id %d" % chid))
+          #Logger.info(INDENT_OUTPUT(3, "Unexpected channel id %d" % chid))
+          pass
         l['chidstr'] = CHANNEL_SUFFIXES.get(chid, "?")
       # put channel info into connection
       linfo.append(l)
@@ -173,9 +173,9 @@ class PsdLayerParser(PsdLayerImageParser):
       self.fd.seek(extrastart + extralen, 0) # 0: SEEK_SET
       self.layers.append(l)
       if visible_bit == 1:
-        Logger.info(INDENT_OUTPUT(1, "layer %(idx)d: (%(left)4d,%(top)4d,%(right)4d,%(bottom)4d), %(channels)d channels (%(cols)4d cols x %(rows)4d rows) Name:%(name)s" % l))
+        #Logger.info(INDENT_OUTPUT(1, "layer %(idx)d: (%(left)4d,%(top)4d,%(right)4d,%(bottom)4d), %(channels)d channels (%(cols)4d cols x %(rows)4d rows) Name:%(name)s" % l))
         if l.has_key('text_layer'):
-          Logger.info("%s" % l['text_layer']['text_desc']['Txt '])
+          #Logger.info("%s" % l['text_layer']['text_desc']['Txt '])
           pass
           #text_layer = l['text_layer']
           #json.dumps(text_layer)
@@ -190,11 +190,12 @@ class PsdLayerParser(PsdLayerImageParser):
     if layerlen:
       self.parse_layerlen(layerlen)
     else:
-      Logger.info(INDENT_OUTPUT(1, "Layer info section is empty"))
+      #Logger.info(INDENT_OUTPUT(1, "Layer info section is empty"))
+      pass
     skip = miscstart + misclen - self.fd.tell()
     if skip:
-      Logger.info("")
-      Logger.info("Skipped %d bytes at end of misc data?" % skip)
+      #Logger.info("")
+      #Logger.info("Skipped %d bytes at end of misc data?" % skip)
       self.fd.seek(skip, 1) # 1: SEEK_CUR
     
   def parse_layers_and_masks(self):
@@ -204,8 +205,8 @@ class PsdLayerParser(PsdLayerImageParser):
       self._skip_block('image resources', new_line=True)
       self.ressources = 'not parsed'
 
-    Logger.info("")
-    Logger.info("# Layers & Masks #")
+    #Logger.info("")
+    #Logger.info("# Layers & Masks #")
 
     self.layers = []
     self.images = []
@@ -215,5 +216,6 @@ class PsdLayerParser(PsdLayerImageParser):
       self.parse_misclen(misclen)
       #Logger.info('Misc info section is parsed')
     else:
-      Logger.info(INDENT_OUTPUT(1, "Misc info section is empty"))
+      #Logger.info(INDENT_OUTPUT(1, "Misc info section is empty"))
+      pass
 

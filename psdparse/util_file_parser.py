@@ -6,7 +6,6 @@ sys.setdefaultencoding("utf-8")
 from struct import unpack, calcsize
 from PIL import Image
 
-from kivy.logger import Logger
 import os
 
 from util_indent_output import INDENT_OUTPUT
@@ -24,7 +23,8 @@ class FileParser(object):
       self.fd.seek(n, 1) # 1: relative
 
     if new_line:
-      Logger.info('')
+      #Logger.info('')
+      pass
     #Logger.info(INDENT_OUTPUT(indent, 'Skipped %s with %s bytes' % (desc, n)))
 
 

@@ -6,7 +6,6 @@ sys.setdefaultencoding("utf-8")
 from struct import unpack, calcsize
 from PIL import Image
 
-from kivy.logger import Logger
 import os
 
 from util_indent_output import INDENT_OUTPUT
@@ -20,8 +19,8 @@ class PsdImageResourceParser(PsdHeaderParser):
   ressources = None
   
   def parse_image_resources(self):
-    Logger.info("")
-    Logger.info("# Ressources #")
+    #Logger.info("")
+    #Logger.info("# Ressources #")
     self.ressources = []
     (n,) = self._readf(">L") # (n,) is a 1-tuple.
     #Logger.info('ttttt001')
@@ -29,4 +28,5 @@ class PsdImageResourceParser(PsdHeaderParser):
       n -= self.parse_irb()
       #Logger.info('ttttt002 %d'%(n))
     if n != 0:
-      Logger.info("Image resources overran expected size by %d bytes" % (-n))
+      #Logger.info("Image resources overran expected size by %d bytes" % (-n))
+      pass

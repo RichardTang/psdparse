@@ -6,7 +6,6 @@ sys.setdefaultencoding("utf-8")
 from struct import unpack, calcsize
 from PIL import Image
 
-from kivy.logger import Logger
 import os
 
 from util_indent_output import INDENT_OUTPUT
@@ -88,7 +87,7 @@ class PsdLayerDescriptorParser(PsdImageResourceParser):
       item_key = self._string_or_key()
       item_type = self._readf(">4s")[0]
       if not item_type in _desc_item_factory:
-        Logger.info(INDENT_OUTPUT(4, "unknown descriptor item '%s', skipping ahead." % item_type))
+        #Logger.info(INDENT_OUTPUT(4, "unknown descriptor item '%s', skipping ahead." % item_type))
         break
 
       #Logger.info('%s for %s' % (item_type, item_key))

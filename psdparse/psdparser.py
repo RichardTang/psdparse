@@ -6,7 +6,6 @@ sys.setdefaultencoding("utf-8")
 from struct import unpack, calcsize
 from PIL import Image
 
-from kivy.logger import Logger
 import os
 
 from psd_channel_suffixes import CHANNEL_SUFFIXES
@@ -27,7 +26,7 @@ class PSDParser(PsdLayerParser):
     self.filename = filename
 
   def parse(self):
-    Logger.info("Opening '%s'" % self.filename)
+    #Logger.info("Opening '%s'" % self.filename)
     self.fd = open(self.filename, 'rb')
     try:
       self.parse_header()
@@ -36,8 +35,8 @@ class PSDParser(PsdLayerParser):
       self.parse_image_data()
     finally:
       self.fd.close()
-    Logger.info("")
-    Logger.info("DONE")
+    #Logger.info("")
+    #Logger.info("DONE")
 
   def parse_image_data(self):
     if not self.header:

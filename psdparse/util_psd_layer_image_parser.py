@@ -6,7 +6,6 @@ sys.setdefaultencoding("utf-8")
 from struct import unpack, calcsize
 from PIL import Image
 
-from kivy.logger import Logger
 import os
 
 from util_indent_output import INDENT_OUTPUT
@@ -104,7 +103,7 @@ class PsdLayerImageParser(PsdLayerDescriptorParser):
     #Logger.info('chlen=%d' % chlen)
     #Logger.info('chpos=%d' % chpos)
     if (chlen is not None) and (self.fd.tell() != chpos + 2 + chlen):
-      Logger.info("currentpos:%d should be:%d!" % (self.fd.tell(), chpos + 2 + chlen))
+      #Logger.info("currentpos:%d should be:%d!" % (self.fd.tell(), chpos + 2 + chlen))
       self.fd.seek(chpos + 2 + chlen, 0) # 0: SEEK_SET
     #Logger.info('end of parse channel')
     return

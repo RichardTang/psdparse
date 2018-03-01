@@ -6,7 +6,6 @@ sys.setdefaultencoding("utf-8")
 from struct import unpack, calcsize
 from PIL import Image
 
-from kivy.logger import Logger
 import os
 
 from util_indent_output import INDENT_OUTPUT
@@ -19,8 +18,8 @@ class PsdHeaderParser(PsdCommonParser):
   header = None
   
   def parse_header(self):
-    Logger.info("")
-    Logger.info("# Header #")
+    #Logger.info("")
+    #Logger.info("# Header #")
 
     self.header = {}
 
